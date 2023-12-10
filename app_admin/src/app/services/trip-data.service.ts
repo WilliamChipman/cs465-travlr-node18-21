@@ -1,5 +1,6 @@
 import { Injectable, Inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 import { Trip } from '../models/trip';
 import { BROWSER_STORAGE } from '../storage';
@@ -36,8 +37,12 @@ export class TripDataService {
 
   public addTrip(formData: Trip): Promise<Trip[]> {
     console.log('Inside TripDataService#addTrip');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('travlr-token')}`,
+    });
     return this.http
-      .post(this.tripUrl, formData)
+      .post(this.tripUrl, formData, { headers: headers })
       .toPromise()
       .then((response) => response as Trip[])
       .catch(this.handleError);
@@ -45,8 +50,12 @@ export class TripDataService {
 
   public updateTrip(formData: Trip): Promise<Trip[]> {
     console.log('Inside TripDataService#updateTrip');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${localStorage.getItem('travlr-token')}`,
+    });
     return this.http
-      .put(this.tripUrl + formData.code, formData)
+      .put(this.tripUrl + formData.code, formData, { headers: headers })
       .toPromise()
       .then((response) => response as Trip[])
       .catch(this.handleError);

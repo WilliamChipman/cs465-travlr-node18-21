@@ -27,7 +27,6 @@ const tripsFindByCode = async (req, res) => {
 };
 
 const tripsAddTrip = async (req, res) => {
-  console.log(req.body);
   getUser(req, res, (req, res) => {
     Model.create(
       {
@@ -56,7 +55,6 @@ const tripsAddTrip = async (req, res) => {
 };
 
 const tripsUpdateTrip = async (req, res) => {
-  console.log(req.body);
   getUser(req, res, (req, res) => {
     Model.findOneAndUpdate(
       { code: req.params.tripCode },
@@ -94,9 +92,8 @@ const tripsUpdateTrip = async (req, res) => {
 };
 
 const getUser = (req, res, callback) => {
-  console.log(req.body);
-  if (req.payload && req.payload.email) {
-    user.findOne({ email: req.payload.email }).exec((err, user) => {
+  if (req.auth && req.auth.email) {
+    user.findOne({ email: req.auth.email }).exec((err, user) => {
       if (!user) {
         return res.status(404).json({ message: "User not found1" });
       } else if (err) {
